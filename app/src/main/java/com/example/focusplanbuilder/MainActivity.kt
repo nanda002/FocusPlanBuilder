@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -28,6 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 
 data class FocusPlan(
     val subject: String,
@@ -129,75 +138,175 @@ fun FocusPlanScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        containerColor = Color(0xFFF8F6FF)
     ) { innerPadding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(20.dp),
+                .padding(20.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top
         ) {
 
             Text(
                 text = "Focus Plan Builder",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF151A2D)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Enter a subject and the amount of time you have available to create a focused study plan."
+                text = "Set your topic and the available time for a focused study plan.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color(0xFF697084)
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
-            OutlinedTextField(
-                value = subject,
-                onValueChange = onSubjectChange,
-                label = {
-                    Text("Study subject")
-                },
-                placeholder = {
-                    Text("e.g. Kotlin, Databases, Compose state")
-                },
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = minutesText,
-                onValueChange = onMinutesChange,
-                label = {
-                    Text("Available minutes")
-                },
-                placeholder = {
-                    Text("10–180")
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 2.dp
                 )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onCreatePlan,
-                enabled = canCreatePlan,
-                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Create plan")
-            }
+                Column(
+                    modifier = Modifier.padding(18.dp)
+                ) {
+                    Text(
+                        text = "STUDY SUBJECT",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF697084)
+                    )
 
-            Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            if (plan != null) {
-                FocusPlanCard(plan)
+                    OutlinedTextField(
+                        value = subject,
+                        onValueChange = onSubjectChange,
+                        placeholder = {
+                            Text("e.g. Kotlin, Databases, Compose state")
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        shape = RoundedCornerShape(18.dp),
+                        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedBorderColor = Color(0xFFD9D3E8),
+                            unfocusedBorderColor = Color(0xFFE2DDEB),
+                            focusedTextColor = Color(0xFF151A2D),
+                            unfocusedTextColor = Color(0xFF151A2D),
+                            focusedPlaceholderColor = Color(0xFF8A8F9E),
+                            unfocusedPlaceholderColor = Color(0xFF8A8F9E),
+                            cursorColor = Color(0xFF7D2ACB)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    Text(
+                        text = "AVAILABLE MINUTES",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF697084)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = minutesText,
+                        onValueChange = onMinutesChange,
+                        placeholder = {
+                            Text("10–180")
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        shape = RoundedCornerShape(18.dp),
+                        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedBorderColor = Color(0xFFD9D3E8),
+                            unfocusedBorderColor = Color(0xFFE2DDEB),
+                            focusedTextColor = Color(0xFF151A2D),
+                            unfocusedTextColor = Color(0xFF151A2D),
+                            focusedPlaceholderColor = Color(0xFF8A8F9E),
+                            unfocusedPlaceholderColor = Color(0xFF8A8F9E),
+                            cursorColor = Color(0xFF7D2ACB)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    Button(
+                        onClick = onCreatePlan,
+                        enabled = canCreatePlan,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF7D2ACB),
+                            contentColor = Color.White,
+                            disabledContainerColor = Color(0xFFD8C8EE),
+                            disabledContentColor = Color(0xFF8A7A9E)
+                        )
+                    ) {
+                        Text(
+                            text = "Create Study Plan",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                if (plan != null) {
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    HorizontalDivider(
+                        color = Color(0xFFD9D3E8),
+                        thickness = 1.dp
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color.White
+                        ),
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 2.dp
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(18.dp)
+                        ) {
+                            Text(
+                                text = "GENERATED PLAN",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF7D2ACB)
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            FocusPlanCard(plan)
+                        }
+                    }
+                }
             }
         }
     }
@@ -206,64 +315,94 @@ fun FocusPlanScreen(
 @Composable
 fun FocusPlanCard(plan: FocusPlan) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        )
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(18.dp)
         ) {
 
             Text(
                 text = plan.subject,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF151A2D)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
 
-            Row {
-                Text(
-                    text = "Duration: ",
-                    style = MaterialTheme.typography.bodyLarge
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFF1ECFA)
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 0.dp
                 )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Duration",
+                            color = Color(0xFF697084)
+                        )
 
-                Text(
-                    text = "${plan.minutes} minutes"
-                )
-            }
+                        Text(
+                            text = "${plan.minutes} minutes",
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF151A2D)
+                        )
+                    }
 
-            Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
-            Row {
-                Text(
-                    text = "Category: ",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Category",
+                            color = Color(0xFF697084)
+                        )
 
-                Text(
-                    text = plan.category
-                )
-            }
+                        Text(
+                            text = plan.category,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF151A2D)
+                        )
+                    }
 
-            Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
-            Row {
-                Text(
-                    text = "Recommended break: ",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Recommended break",
+                            color = Color(0xFF697084)
+                        )
 
-                Text(
-                    text = "${plan.breakMinutes} minutes"
-                )
+                        Text(
+                            text = "${plan.breakMinutes} minutes",
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF151A2D)
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Study ${plan.subject} for ${plan.minutes} minutes, and then take a ${plan.breakMinutes}-minute break.",
-                style = MaterialTheme.typography.bodyLarge
+                text = "Study ${plan.subject} for ${plan.minutes} minutes, then take a ${plan.breakMinutes}-minute break.",
+                color = Color(0xFF697084)
             )
         }
     }
