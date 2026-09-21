@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Focus Plan Builder</string>
+
+    <string name="screen_title">Focus Plan Builder</string>
+    <string name="screen_description">Set your topic and the available time for a focused study plan.</string>
+
+    <string name="study_subject">STUDY SUBJECT</string>
+    <string name="subject_hint">e.g. Kotlin, Databases, Compose state</string>
+
+    <string name="available_minutes">AVAILABLE MINUTES</string>
+    <string name="minutes_hint">10–180</string>
+
+    <string name="create_study_plan">Create Study Plan</string>
+
+    <string name="generated_plan">GENERATED PLAN</string>
+
+    <string name="duration">Duration</string>
+    <string name="category">Category</string>
+    <string name="recommended_break">Recommended break</string>
+
+    <string name="minutes">%1$d minutes</string>
+
+    <string name="invalid">Invalid</string>
+    <string name="quick_review">Quick review</string>
+    <string name="focused_session">Focused session</string>
+    <string name="extended_session">Extended session</string>
+    <string name="study_summary">Study %1$s for %2$d minutes, and then take a %3$d-minute break.</string>
+
 </resources>

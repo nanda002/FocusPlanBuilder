@@ -30,13 +30,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.remember
 
 data class FocusPlan(
     val subject: String,
@@ -88,7 +87,7 @@ fun FocusPlanRoute(
         mutableStateOf("")
     }
 
-    var plan by rememberSaveable {
+    var plan by remember {
         mutableStateOf<FocusPlan?>(null)
     }
 
@@ -120,6 +119,9 @@ fun FocusPlanRoute(
                     category = durationCategory(minutes),
                     breakMinutes = recommendedBreak(minutes)
                 )
+
+                subject = ""
+                minutesText = ""
             }
         },
         modifier = modifier
@@ -152,7 +154,7 @@ fun FocusPlanScreen(
         ) {
 
             Text(
-                text = "Focus Plan Builder",
+                text = stringResource(R.string.screen_title),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF151A2D)
@@ -161,7 +163,7 @@ fun FocusPlanScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Set your topic and the available time for a focused study plan.",
+                text = stringResource(R.string.screen_description),
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color(0xFF697084)
             )
@@ -182,7 +184,7 @@ fun FocusPlanScreen(
                     modifier = Modifier.padding(18.dp)
                 ) {
                     Text(
-                        text = "STUDY SUBJECT",
+                        text = stringResource(R.string.study_subject),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF697084)
@@ -194,7 +196,7 @@ fun FocusPlanScreen(
                         value = subject,
                         onValueChange = onSubjectChange,
                         placeholder = {
-                            Text("e.g. Kotlin, Databases, Compose state")
+                            Text(stringResource(R.string.subject_hint))
                         },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
@@ -215,7 +217,7 @@ fun FocusPlanScreen(
                     Spacer(modifier = Modifier.height(18.dp))
 
                     Text(
-                        text = "AVAILABLE MINUTES",
+                        text = stringResource(R.string.available_minutes),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF697084)
@@ -227,7 +229,7 @@ fun FocusPlanScreen(
                         value = minutesText,
                         onValueChange = onMinutesChange,
                         placeholder = {
-                            Text("10–180")
+                            Text(stringResource(R.string.minutes_hint))
                         },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
@@ -258,53 +260,53 @@ fun FocusPlanScreen(
                             .height(52.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF7D2ACB),
-                            contentColor = Color.White,
+                            containerColor = if (canCreatePlan) Color(0xFF000000) else Color(0xFFD8C8EE),
+                            contentColor = if (canCreatePlan) Color.White else Color(0xFF3B165C),
                             disabledContainerColor = Color(0xFFD8C8EE),
-                            disabledContentColor = Color(0xFF8A7A9E)
+                            disabledContentColor = Color(0xFF3B165C)
                         )
                     ) {
                         Text(
-                            text = "Create Study Plan",
+                            text = stringResource(R.string.create_study_plan),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
-                if (plan != null) {
-                    Spacer(modifier = Modifier.height(24.dp))
+            }
+            if (plan != null) {
+                Spacer(modifier = Modifier.height(24.dp))
 
-                    HorizontalDivider(
-                        color = Color(0xFFD9D3E8),
-                        thickness = 1.dp
+                HorizontalDivider(
+                    color = Color(0xFFD9D3E8),
+                    thickness = 1.dp
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 2.dp
                     )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
-                        ),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 2.dp
-                        )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(18.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(18.dp)
-                        ) {
-                            Text(
-                                text = "GENERATED PLAN",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF7D2ACB)
-                            )
+                        Text(
+                            text = stringResource(R.string.generated_plan),
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF3B165C)
+                        )
 
-                            Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                            FocusPlanCard(plan)
-                        }
+                        FocusPlanCard(plan)
                     }
                 }
             }
@@ -315,7 +317,10 @@ fun FocusPlanScreen(
 @Composable
 fun FocusPlanCard(plan: FocusPlan) {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF410B75)
+        )
     ) {
         Column(
             modifier = Modifier.padding(18.dp)
@@ -325,7 +330,7 @@ fun FocusPlanCard(plan: FocusPlan) {
                 text = plan.subject,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF151A2D)
+                color = Color(0xFFD9D3E8)
             )
 
 
@@ -349,12 +354,12 @@ fun FocusPlanCard(plan: FocusPlan) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Duration",
-                            color = Color(0xFF697084)
+                            text = stringResource(R.string.duration),
+                            color = Color(0xFF3B165C)
                         )
 
                         Text(
-                            text = "${plan.minutes} minutes",
+                            text = stringResource(R.string.minutes, plan.minutes),
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF151A2D)
                         )
@@ -367,8 +372,8 @@ fun FocusPlanCard(plan: FocusPlan) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Category",
-                            color = Color(0xFF697084)
+                            text = stringResource(R.string.category),
+                            color = Color(0xFF3B165C)
                         )
 
                         Text(
@@ -385,12 +390,12 @@ fun FocusPlanCard(plan: FocusPlan) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Recommended break",
-                            color = Color(0xFF697084)
+                            text = stringResource(R.string.recommended_break),
+                            color = Color(0xFF3B165C)
                         )
 
                         Text(
-                            text = "${plan.breakMinutes} minutes",
+                            text = stringResource(R.string.minutes, plan.breakMinutes),
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF151A2D)
                         )
@@ -401,8 +406,13 @@ fun FocusPlanCard(plan: FocusPlan) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Study ${plan.subject} for ${plan.minutes} minutes, then take a ${plan.breakMinutes}-minute break.",
-                color = Color(0xFF697084)
+                text = stringResource(
+                    R.string.study_summary,
+                    plan.subject,
+                    plan.minutes,
+                    plan.breakMinutes
+                ),
+                color = Color(0xFFF1ECFA)
             )
         }
     }
